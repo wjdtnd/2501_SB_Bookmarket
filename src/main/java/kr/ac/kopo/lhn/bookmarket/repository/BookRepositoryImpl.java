@@ -2,6 +2,7 @@ package kr.ac.kopo.lhn.bookmarket.repository;
 
 import kr.ac.kopo.lhn.bookmarket.domain.Book;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter;
 
 import java.lang.annotation.Repeatable;
 import java.math.BigDecimal;
@@ -10,9 +11,10 @@ import java.util.List;
 
 @Repository
 public class BookRepositoryImpl implements BookRepository {
+    private final AbstractHandlerMethodAdapter abstractHandlerMethodAdapter;
     private List<Book> listOfBooks = new ArrayList<Book>();
 
-    public BookRepositoryImpl() {
+    public BookRepositoryImpl(AbstractHandlerMethodAdapter abstractHandlerMethodAdapter) {
         Book book1 = new Book();
         book1.setBookID("1140711962");
         book1.setName("스프링 부트 완전정복");
@@ -63,11 +65,27 @@ public class BookRepositoryImpl implements BookRepository {
         listOfBooks.add(book1);
         listOfBooks.add(book2);
         listOfBooks.add(book3);
-
+        this.abstractHandlerMethodAdapter = abstractHandlerMethodAdapter;
     }
 
     @Override
     public List<Book> getAllBookList() {
         return listOfBooks;
+    }
+
+    @Override
+    public Book getBookById(String bookId) {
+        Book bookInfo = null;
+        for (Book book : listOfBooks) {
+            if (book != null && book.getBookID() != null && book.getBookID().equals(bookId)) {
+                bookInfo = book;
+                break;
+            }
+        }
+
+        if(bookInfo == null){
+            throw new IllegalArgumentException("도서 번호가 " + bookId + "인 해당 도서를 찾을 수 없습니다.");
+        }
+        return bookInfo;
     }
 }
