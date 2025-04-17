@@ -4,7 +4,6 @@ import kr.ac.kopo.lhn.bookmarket.domain.Book;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter;
 
-import java.lang.annotation.Repeatable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,4 +87,16 @@ public class BookRepositoryImpl implements BookRepository {
         }
         return bookInfo;
     }
+
+    @Override
+    public List<Book> getBookListByCategory(String category) {
+        List<Book> booksByCategory = new ArrayList<>();
+        for (Book book : listOfBooks) {
+            if (book.getCategory() != null && book.getCategory().equals(category)) {
+                booksByCategory.add(book);
+            }
+        }
+        return booksByCategory;
+    }
+
 }
