@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import kr.ac.kopo.lhn.bookmarket.service.BookService;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -48,11 +49,31 @@ public class BookController {
         return "book";
     }
 
-    @GetMapping("/filter/{bookfilter}")
+    @GetMapping("/filter/{bookFilter}")
     public String requestBooksByFilter(@MatrixVariable(pathVar = "bookFilter")Map<String, List<String>> bookFilter, Model model) {
         Set<Book> booksByFilter = bookService.getBookListByFilter(bookFilter);
         model.addAttribute("bookList", booksByFilter);
         return "books";
     }
 
+    @GetMapping("/add")
+    public String requestAddBookForm(Model model) {
+        return "addBook";
+    }
+
+    @PostMapping("/add")
+    public String requestSubmitNewBook(@ModelAttribute("book") Book book) {
+        bookService.setNewBook(book);
+        return "redirect:/books";
+    }
+
+    @ModelAttribute
+    public void addAttribute(Model model) {
+        model.addAttribute("addTitle", "신규 도서 등록");
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAllowedFields("bookId", "name", "unitPrice", "author", "description", "publisher", "category", "unitInStock", "releaseDate", "condition");
+    }
 }

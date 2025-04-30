@@ -1,15 +1,13 @@
 package kr.ac.kopo.lhn.bookmarket.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+//@Getter
+//@Setter
+//@NoArgsConstructor
 //@AllArgsConstructor 오늘은 안씀
 public class Book {
     private String bookID; // 도서 ID
